@@ -1,0 +1,39 @@
+{
+  "name": "cms-visualization-validator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PactumJS-based read-only validator that reports whether CMS Visualization tab data exists in the Gold Lakehouse, per view and per creditor/debtor role.",
+  "license": "UNLICENSED",
+  "main": "electron/main.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "electron .",
+    "ui": "electron .",
+    "demo": "electron . --demo",
+    "validate": "node src/cli.js validate",
+    "validate:cms": "node src/cli.js validate --mode cms",
+    "validate:raw": "node src/cli.js validate --mode raw",
+    "validate:both": "node src/cli.js validate --mode both",
+    "verify": "node src/cli.js verify",
+    "verify:capture": "node scripts/capture-verify-fixtures.js",
+    "verify:offline": "node scripts/verify-from-fixtures.js",
+    "dry-run": "node src/cli.js validate --dry-run",
+    "registry": "node src/cli.js registry",
+    "health": "node src/cli.js health",
+    "tables": "node src/cli.js tables",
+    "login": "node src/cli.js login",
+    "test": "mocha --recursive tests/unit",
+    "test:pactum": "mocha --recursive --timeout 90000 tests/pactum"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pactum": "^3.9.1"
+  },
+  "devDependencies": {
+    "electron": "^45.3.0",
+    "mocha": "^10.7.3"
+  }
+}

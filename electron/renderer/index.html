@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:"
+    />
+    <title>CMS Visualization Data Validator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">CMS</div>
+        <div>
+          <h1>Visualization Data Validator</h1>
+          <p id="conn" class="conn">connecting…</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="saveJsonBtn" class="btn ghost" disabled>Save JSON</button>
+        <button id="saveMdBtn" class="btn ghost" disabled>Save MD</button>
+        <button id="healthBtn" class="btn ghost">Test connection</button>
+      </div>
+    </header>
+
+    <nav class="viewSwitch">
+      <button id="viewAvailability" class="viewBtn active">Availability</button>
+      <button id="viewVerify" class="viewBtn">Data Verify</button>
+    </nav>
+
+    <section class="controls">
+      <label class="field">
+        <span>Alert ID</span>
+        <input id="alertId" type="number" min="1" placeholder="e.g. 796" />
+      </label>
+
+      <label class="field" title="Optional: pin the end-to-end id if Alert Navigator cannot supply it.">
+        <span>E2E id (optional)</span>
+        <input id="e2e" type="text" placeholder="auto from Alert Navigator" />
+      </label>
+
+      <label class="field" title="Per-query timeout. Slow Counterparty / Alert History queries can need 30–40s.">
+        <span>Max wait / query (s)</span>
+        <input id="maxWait" type="number" min="5" max="180" step="1" value="35" />
+      </label>
+
+      <label class="field" title="How many checks run in parallel. Lower is gentler on the Lakehouse and avoids downstream timeouts.">
+        <span>Concurrency</span>
+        <input id="concurrency" type="number" min="1" max="8" step="1" value="2" />
+      </label>
+
+      <label class="field">
+        <span>Granularity</span>
+        <select id="granularity">
+          <option value="day">day</option>
+          <option value="month" selected>month</option>
+          <option value="year">year</option>
+        </select>
+      </label>
+
+      <label class="field" id="modeField">
+        <span>Mode</span>
+        <select id="mode">
+          <option value="cms" selected>cms (faithful)</option>
+          <option value="raw">raw (diagnostic)</option>
+          <option value="both">both</option>
+        </select>
+      </label>
+
+      <label class="field hidden" id="toleranceField">
+        <span>Tolerance</span>
+        <input id="tolerance" type="number" min="0" step="0.01" value="0.01" />
+      </label>
+
+      <label class="field">
+        <span>Tenant</span>
+        <input id="tenant" type="text" placeholder="DEFAULT" />
+      </label>
+
+      <div class="field roles">
+        <span>Roles</span>
+        <div class="roleBox">
+          <label><input type="checkbox" id="roleCreditor" checked /> Creditor</label>
+          <label><input type="checkbox" id="roleDebtor" checked /> Debtor</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span>Options</span>
+        <label class="inlineCheck"><input type="checkbox" id="retryTransient" /> Retry failed once</label>
+      </div>
+
+      <button id="runBtn" class="btn primary run">Run validation</button>
+    </section>
+
+    <div id="banner" class="banner hidden"></div>
+
+    <section id="summary" class="summary hidden">
+      <div class="chips" id="chips"></div>
+      <div class="meta" id="runMeta"></div>
+    </section>
+
+    <main id="cards" class="cards"></main>
+
+    <section id="emptyState" class="empty">
+      <p>Enter an alert id and press <strong>Run validation</strong>.</p>
+      <p class="hint">
+        Tip: Counterparty Network and Alert History can take 20–35s per call. If a check shows
+        FAILED / timeout, raise <em>Max wait / query</em> and run again.
+      </p>
+    </section>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="spinner"></div>
+      <p id="overlayText">Running queries…</p>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
